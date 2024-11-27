@@ -1,5 +1,4 @@
 import json
-
 with open("file.json", 'r', encoding='utf-8') as file:
     i_file = json.load(file)
 
