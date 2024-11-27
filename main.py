@@ -1,97 +1,107 @@
 import json
-brik = 0
-index = 0
-with open("file.json", "r", encoding="utf-8") as a:
-    file = json.load(a)
+
+with open("file.json", 'r', encoding='utf-8') as file:
+    i_file = json.load(file)
+
+counter = 0
+brik_close = 0
+dizel = True
+
+def menu():
+    print("""
+        1 - Вывести все записи 
+        2 - Вывести запись по полю 
+        3 - Добавить запись 
+        4 - Удалить запись по полю 
+        5 - Выйти из программы
+        """)
 
 def all_see():
-    global counter
-    for i in file:
-            print(f"""
-            ID: {i["id"]}, 
-            Имя: {i["name"]},                       
-            Facture: {i["manufacturer"]}, 
-            Benzin: {i["is_petrol"]},    
-            v3: {i["tank_volume"]}
-            """)
+    global counter 
+    for i in i_file:
+        print(f"""
+        Код: {i['id']}, 
+        Имя: {i['name']},                       
+        Производитель: {i['manufacturer']}, 
+        Бензин: {i['is_petrol']},    
+        Объем v3 : {i['tank_volume']} 
+        """)
+    counter += 1
 
 def kluch_see():
     global counter
-    found = False
-    id_input = input("Введите ключ: ")
-    for i in file:
-        if id_input == i["id"]:  
+    idnum = int(input("Введите номер машины: "))
+    for i in i_file:
+        if idnum == i['id']:
             print(f"""
-            ID: {i["id"]}, 
-            Имя: {i["name"]},                       
-            Facture: {i["manufacturer"]}, 
-            Benzin: {i["is_petrol"]},    
-            v3: {i["tank_volume"]}
+            Код: {i['id']}, 
+            Имя: {i['name']},                       
+            Производитель: {i['manufacturer']}, 
+            Бензин: {i['is_petrol']},    
+            Объем v3: {i['tank_volume']}
             """)
-            found = True
-            break
-        if not found:
-            print("Такой записи нет :(")
-def add_see():
-    global counter
-    add_input = input("Введите ключ для добавления: ")
-    found_2 = False
-    for i in file:
-        if i["id"] == add_input:
-            found_2 = True
-            print("Такой ключ уже есть")
-            break
-        else:
-            add_name_input = input("Введите название машины: ")
-            add_creator_input = input("Введите название производителя: ")
-            add_bool_input = input("Заправляется ли машина бензином (да/нет): ")
-            add_cub_input = input("Введите объём бака в литрах: ")
+            counter += 1
+            return
+    print("Машина не найдена")
+    counter += 1
 
-            repository = {
-                "id": add_input,
-                "name": add_name_input,
-                "manufacturer": add_creator_input,
-                "is_petrol": True if add_bool_input == "да" else False,
-                "tank_volume": add_cub_input,   
-            }
-            file.append(repository)
-            with open("file.json", "w", encoding="utf-8") as b:
-                json.dump(file, b)  
+def add_see():
+    global counter 
+    brik = False
+    ids = int(input("Введите номер машины: "))
+    
+    for i in i_file:
+        if i['id'] == ids:
+            brik = True
+        break
+    
+    if brik:
+        print("Машина с таким номером уже существует.")
+        counter += 1
+    else:
+        name = input("Введите имя машины: ")  
+        manufacturer = input("Введите завод изготовитель: ")  
+        is_petrol = input("бензин ? введите да/нет: ")  
+        tank_volume = float(input("Введите объем v3 машины: "))  
+
+        new_i = {
+            'id': ids,
+            'name': name,
+            'manufacturer': manufacturer,
+            'is_petrol': True if is_petrol == 'да' else dizel == False, 
+            'tank_volume': tank_volume
+        }
+
+        i_file.append(new_i) 
+        with open("file.json", 'w', encoding='utf-8') as output_file: 
+            json.dump(i_file, output_file)
+        print("Машина успешно добавлена.")
+        counter += 1
+           
 
 def del_kluch_see():
-    global counter
-    del_input = int(input("Введите ключ для удаления: "))
-    found_3 = False
-    try:
-        for i in file:
-            if del_input == i["id"]:
-                file.remove(i)
-        with open("file.json", "w", encoding="utf-8") as b:
-            json.dump(file, b)
-    except StopIteration:
-        print("Такой записи нет")
+    iddel = int(input("Введите номер машины: "))
+    for i in i_file:
+        if iddel == i['id']:
+            i_file.remove(i)
+            with open("file.json", 'w', encoding='utf-8') as output_file:
+                json.dump(i_file, output_file)
+            print("Машина успешно удалена.")
+            counter += 1
+            return
+    print("Запись не найдена.")
+    counter += 1
 
 def end_see():
-    global brik
-    print("Вы закрыли программу, ПОЗДРАВЛЯЮ ХЫЦКЖСФЮЪКСЪ")
-    brik += 1
-
-def not_end():
-    print("ТЫ ЧОТ ПОПУТАЛ ПОХОДУ")
-
-def menu():
-    print("""==================================
-1 - Вывести все записи
-2 - Вывести запись по ключу
-3 - Добавить запись
-4 - Удалить запись по ключу
-5 - Выйти из программы
-==================================""")
+    global brik_close
+    print(f"!!!!!!!!!!!! Программа завершена !!!!!!!!!! Она мучилась ровно {counter} раз !!!!!!!!!!!")
+    brik_close += 1 
 
 def main():
-    while brik != 1:
+    while brik_close != 1:
         menu()
-        user_input = int(input("Введите действие: "))
+        user_input = int(input("Введите действие какое хотите выполнить: "))
+
         if user_input == 1:
             all_see()
         elif user_input == 2:
@@ -103,6 +113,6 @@ def main():
         elif user_input == 5:
             end_see()
         else:
-            not_end()
+            print("Некорректный ввод. Пожалуйста, выберите номер от 1 до 5.")
 
 main()
