@@ -1,10 +1,6 @@
 import json
 
-with open("file.json", 'r', encoding='utf-8') as file:
-    i_file = json.load(file)
 
-counter = 0
-brik_close = 0
 
 def menu():
     print("""
@@ -126,6 +122,12 @@ def end_see():
     brik_close = 1  # Устанавливаем флаг завершения программы
 
 def main():
+    with open("file.json", 'r', encoding='utf-8') as file:
+        i_file = json.load(file)
+
+    counter = 0
+    brik_close = 0
+    
     while brik_close != 1:
         menu()
         try:
